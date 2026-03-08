@@ -1,0 +1,16 @@
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+torch
+gymnasium
+stable-baselines3
+sb3-contrib
+pyyaml
+tqdm
+scikit-learn
+tensorboard
+jupyter
+ipykernel
+yfinance
