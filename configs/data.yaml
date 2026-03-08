@@ -1,0 +1,9 @@
+# Historical market data configuration (LSE)
+input_csv: data/raw/lse_prices.csv
+output_csv: data/processed/lse_features.csv
+symbol_column: symbol
+date_column: date
+price_column: close
+symbol: VOD.L
+lookback_window: 20
+train_split: 0.8

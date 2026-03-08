@@ -1,0 +1,7 @@
+algo: PPO
+learning_rate: 3e-4
+batch_size: 2048
+epochs: 10
+gamma: 0.99
+cvar_alpha: 0.95
+total_timesteps: 250000

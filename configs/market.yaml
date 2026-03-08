@@ -1,0 +1,8 @@
+mu: 0.05
+sigma: 0.2
+r: 0.01
+S0: 100
+K: 100
+T: 1.0
+steps: 252
+transaction_cost: 0.001
