@@ -1,0 +1,6 @@
+data/
+models/
+checkpoints/
+results/
+tb_logs/
+artifacts/

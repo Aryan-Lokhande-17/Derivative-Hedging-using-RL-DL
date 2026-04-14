@@ -187,10 +187,26 @@ Then open:
 - `http://localhost:8000/frontend/`
 
 ---
+#### Results after training RL model
 
-## Next steps recommended
+Derivative Hedging using RL — Final Results (NB7)
 
-- Add walk-forward validation splits by date.
-- Add richer features (realized skew, volume, implied vol if available).
-- Add CVaR-tail objective in training loop.
-- Add policy evaluation dashboard for hedge PnL/error distribution.
+Dataset:    12 instruments (LSE equities, oil, gold, FX), 2020–2025
+Model:      PPO with MLP policy (512→256→128), 13.7M total training steps
+Baseline:   Black-Scholes delta hedging
+
+Primary metric          RL Agent    BS Baseline    vs Target
+─────────────────────────────────────────────────────────────
+Bull market PnL         +0.00954    +0.00140       ✅ 6.8× BS
+Sharpe ratio            +3.925      +0.883         ✅ > 0.37
+avg |portfolio delta|    0.012       —             ✅ < 0.10
+Win rate (bull)         51.7%        48.3%         ✅ > 50%
+t-test p-value          0.032        —             ✅ < 0.05
+Bear market win rate    100%         —             ✅
+BuyU / SellU            1.3% / 12%   —             ✅ < 35% each
+Close All frequency      0%          —             ✅ < 10%
+
+Three degenerate strategies discovered and fixed iteratively:
+  NB2→NB3: Close All exploit (57% → 0%)
+  NB4→NB5: Buy-underlying momentum (75% → 2%)
+  NB5→NB6: Sell-underlying bear momentum (88% → 12%)

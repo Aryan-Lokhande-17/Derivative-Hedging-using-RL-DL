@@ -6,24 +6,13 @@ from hedging_rl.config import load_market_config
 from hedging_rl.env import DerivativeHedgingEnv
 
 
-# -----------------------------
-# LOAD ENVIRONMENT
-# -----------------------------
-
 market_cfg = load_market_config("configs/market.yaml")
 
 env = DerivativeHedgingEnv(config=market_cfg)
 
-# -----------------------------
-# LOAD TRAINED RL MODEL
-# -----------------------------
 
 model = PPO.load("artifacts/ppo_hedging.zip")
 
-
-# -----------------------------
-# RUN ONE EPISODE
-# -----------------------------
 
 obs, _ = env.reset()
 
@@ -37,33 +26,32 @@ done = False
 
 while not done:
 
-    price = env.S
+    price = obs[2]
     prices.append(price)
-
-    # ---------------------
-    # RL HEDGE
-    # ---------------------
 
     action, _ = model.predict(obs, deterministic=True)
 
     obs, reward, terminated, truncated, info = env.step(action)
 
-    rl_positions.append(env.position)
-    pnl_rl.append(env.pnl)
+    rl_position = obs[3]
+    bs_position = obs[4]
 
-    # ---------------------
-    # BLACK SCHOLES HEDGE
-    # ---------------------
+    rl_positions.append(rl_position)
+    bs_positions.append(bs_position)
 
-    bs_positions.append(info["bs_delta"])
-    pnl_bs.append(info["bs_pnl"])
+    pnl_rl.append(reward)
+
+    if len(prices) > 1:
+        dS = prices[-1] - prices[-2]
+
+        if len(pnl_bs) == 0:
+            pnl_bs.append(bs_position * dS)
+        else:
+            pnl_bs.append(pnl_bs[-1] + bs_position * dS)
+    else:
+        pnl_bs.append(0)
 
     done = terminated or truncated
-
-
-# -----------------------------
-# PLOTS
-# -----------------------------
 
 plt.figure()
 
